@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Smart Quiz App</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+  <div class="container">
+    <h1>AI Quiz Generator</h1>
+    <input type="text" id="topic" placeholder="Enter a topic (e.g., Python, Bible)">
+    <button id="generate">Generate Quiz</button>
+    <pre id="output"></pre>
+  </div>
+
+  <script>
+    $('#generate').click(function () {
+      const topic = $('#topic').val();
+      $('#output').text('Loading...');
+      $.ajax({
+        url: '/generate',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({ topic }),
+        success: function (data) {
+          if (data.questions) {
+            $('#output').text(data.questions);
+          } else {
+            $('#output').text('Error: ' + data.error);
+          }
+        }
+      });
+    });
+  </script>
+</body>
+</html>
+
